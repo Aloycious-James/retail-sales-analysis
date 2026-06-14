@@ -79,7 +79,7 @@ The objective of this project is to:
 ## Power BI Dashboard
 
 Images/
-    executive_summary.png
-    regional_performance.png
-    product_category_analysis.png
+    executive_summary.png,
+    regional_performance.png,
+    product_category_analysis.png,
     customer_analysis.png

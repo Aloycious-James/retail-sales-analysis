@@ -12,15 +12,15 @@ The objective is to simulate a real-world retail analytics workflow by extractin
 
 ### Category Revenue and Profit Analysis
 
-![Category Revenue vs Profit](images/11)Category_by_revenue_vs_profit(1).png)
+![Category Revenue vs Profit](images/11)Category_by_revenue_vs_profit.png)
 
 ### Store Revenue and Profit Analysis
 
-![Store Revenue vs Profit](images/13)Stores_by_revenue_vs_profit(2).png)
+![Store Revenue vs Profit](images/13)Stores_by_revenue_vs_profit.png)
 
 ### Product Average Discount vs Revenue
 
-![Product Discount vs Revenue](images/10)Product_by_avg_discount_vs_revenue(1).png)
+![Product Discount vs Revenue](images/10)Product_by_avg_discount_vs_revenue.png)
 
 ---
 

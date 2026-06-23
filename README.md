@@ -80,7 +80,7 @@ SQL was used to validate data, create business metrics, and answer key business 
 
 ### Store Revenue vs Profit Analysis
 
-![Store Revenue vs Profit](Images/13_Stores_by_revenue_vs_profit.png)
+![Store Revenue vs Profit](SQL_Scripts/SQL_Screen_Shots/13_stores_by_revenue_vs_profit.png)
 
 #### Why this analysis?
 

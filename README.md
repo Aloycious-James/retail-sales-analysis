@@ -1,311 +1,343 @@
-# 🛒 Retail Sales Analysis Project
+# Retail Sales Analysis Using SQL and Python
 
-## 📌 Project Overview
+## Project Overview
 
-This project analyzes retail sales transactions using **SQL, Python, and PostgreSQL** to uncover business insights related to revenue, profit, discounts, product categories, and store performance.
+This project analyzes retail sales transactions using PostgreSQL, SQL, and Python to identify revenue trends, profitability drivers, discount impact, category performance, and store-level performance.
 
-The objective is to simulate a real-world retail analytics workflow by:
-
-- Extracting data from PostgreSQL
-- Performing data analysis using Python
-- Generating visualizations
-- Identifying key business insights
-- Supporting data-driven decision making
+The objective is to simulate a real-world retail analytics workflow by extracting data from a relational database, performing exploratory data analysis, generating visualizations, and delivering business recommendations.
 
 ---
 
-## 🎯 Business Problem
+## Project Preview
 
-Retail businesses need to understand:
+### Category Revenue and Profit Analysis
 
-- Which product categories generate the highest revenue and profit
-- How discounts impact profitability
-- Which stores perform best
-- Revenue and profit distribution patterns
-- Relationships between sales metrics
+![Category Revenue vs Profit](images/11)Category_by_revenue_vs_profit(1).png)
 
-This analysis helps management optimize pricing, promotions, inventory planning, and store operations.
+### Store Revenue and Profit Analysis
+
+![Store Revenue vs Profit](images/13)Stores_by_revenue_vs_profit(2).png)
+
+### Product Average Discount vs Revenue
+
+![Product Discount vs Revenue](images/10)Product_by_avg_discount_vs_revenue(1).png)
 
 ---
 
-## 🛠 Tech Stack
+## Business Problem
 
-| Tool | Purpose |
-|--------|---------|
-| PostgreSQL | Data Storage & Querying |
-| SQL | Data Extraction & Aggregation |
+Retail companies need to answer several important business questions:
+
+- Which product categories generate the highest revenue and profit?
+- How do discounts affect profitability?
+- Which stores perform best?
+- What factors influence revenue and profit?
+- How can business performance be improved?
+
+This project provides data-driven answers to support pricing, inventory, and sales strategies.
+
+---
+
+## Tools and Technologies
+
+| Technology | Purpose |
+|------------|----------|
+| PostgreSQL | Database Management |
+| SQL | Data Extraction and Analysis |
 | Python | Data Analysis |
 | Pandas | Data Manipulation |
-| Matplotlib | Data Visualization |
-| Seaborn | Statistical Visualization |
-| Jupyter Notebook | Analysis Environment |
-| Git & GitHub | Version Control |
+| Matplotlib | Visualization |
+| Seaborn | Statistical Analysis |
+| Jupyter Notebook | Development Environment |
+| GitHub | Version Control |
 
 ---
 
-## 📂 Dataset Information
+## Dataset Description
 
-The project consists of four relational tables:
+The project contains four related tables.
 
 ### Customers
-Contains customer demographic information.
+
+Contains customer information.
+
+| Column |
+|----------|
+| CustomerID |
+| CustomerName |
+| Gender |
+| Age |
 
 ### Products
-Contains:
 
-- Product Name
-- Category
-- Unit Price
-- Cost Price
+Contains product information.
+
+| Column |
+|----------|
+| ProductID |
+| ProductName |
+| Category |
+| UnitPrice |
+| CostPrice |
 
 ### Stores
-Contains:
 
-- Store Name
-- Region
+Contains store information.
+
+| Column |
+|----------|
+| StoreID |
+| StoreName |
+| Region |
 
 ### Transactions
-Contains:
 
-- Transaction Date
-- Customer ID
-- Product ID
-- Store ID
-- Quantity
-- Discount
+Contains sales transaction data.
 
----
-
-## 🗄 Database Schema
-
-```sql
-customers
-products
-stores
-transactions
-```
-
-Relationships:
-
-- One Customer → Many Transactions
-- One Product → Many Transactions
-- One Store → Many Transactions
+| Column |
+|----------|
+| TransactionID |
+| TransactionDate |
+| CustomerID |
+| ProductID |
+| StoreID |
+| Quantity |
+| Discount |
 
 ---
 
-## 📊 SQL Analysis Performed
+## Database Schema
 
-### Revenue Calculation
-
-```sql
-Revenue =
-(Unit Price × Quantity) × (1 - Discount)
+```text
+Customers
+    │
+    ├── Transactions ─── Products
+    │
+    └── Stores
 ```
 
-### Profit Calculation
+---
+
+## Revenue and Profit Formula
+
+### Revenue
 
 ```sql
-Profit =
-((Unit Price × Quantity) × (1 - Discount))
+(UnitPrice * Quantity) * (1 - Discount)
+```
+
+### Profit
+
+```sql
+((UnitPrice * Quantity) * (1 - Discount))
 -
-(Cost Price × Quantity)
+(CostPrice * Quantity)
 ```
 
-### Business Queries
+---
 
-- Revenue by Category
-- Profit by Category
+## SQL Analysis Performed
+
+The following business queries were developed using PostgreSQL:
+
+- Revenue by Product Category
+- Profit by Product Category
 - Revenue by Store
 - Profit by Store
+- Revenue by Region
 - Top Discounted Products
-- Revenue Distribution
-- Profit Distribution
+- Revenue Distribution Analysis
+- Profit Distribution Analysis
 - Correlation Analysis
 
 ---
 
-## 📈 Visualizations
+## Exploratory Data Analysis
 
-### 1. Revenue Distribution
+### Revenue Distribution
 
-Shows the distribution of transaction revenue across all sales.
+![Revenue Distribution](images/revenue_distribustion.png)
 
-**Insight:**
-Most transactions generate low-to-medium revenue while a smaller number generate high revenue.
+**Finding**
 
----
-
-### 2. Profit Distribution
-
-Shows how profit is distributed across transactions.
-
-**Insight:**
-Profit is positively skewed, indicating fewer high-profit transactions.
+Revenue distribution is positively skewed. Most transactions generate low to medium revenue while a smaller number contribute significantly higher revenue.
 
 ---
 
-### 3. Category Profit Analysis
+### Profit Distribution
 
-Compares profit generated by product categories.
+![Profit Distribution](images/profit_distribustion.png)
 
-**Insight:**
+**Finding**
 
-- Fashion generates highest profit.
-- Electronics follows closely.
-- Groceries contribute the least profit.
+Profit distribution is positively skewed. A limited number of transactions contribute a large portion of overall profit.
 
 ---
 
-### 4. Discount vs Profit
+### Category Profit Analysis
 
-Analyzes relationship between discounts and profit.
+![Category Profit](images/category_profit.png)
 
-**Insight:**
+**Finding**
 
-- Higher discounts generally reduce profit.
-- Profit variability increases across discount levels.
-
----
-
-### 5. Correlation Matrix
-
-Measures relationships between:
-
-- Quantity
-- Discount
-- Revenue
-- Cost
-- Profit
-
-**Key Findings:**
-
-| Relationship | Correlation |
-|-------------|-------------|
-| Revenue ↔ Cost | 0.97 |
-| Revenue ↔ Profit | 0.83 |
-| Discount ↔ Profit | -0.24 |
-| Quantity ↔ Revenue | 0.60 |
+Fashion and Electronics generate the highest profit, while Groceries contribute significantly less profit.
 
 ---
 
-## 🔍 Key Business Insights
+### Discount vs Profit Analysis
 
-### Product Categories
+![Discount vs Profit](images/discount_vs_profit.png)
+
+**Finding**
+
+Higher discounts generally reduce profitability and create larger profit fluctuations.
+
+---
+
+### Correlation Matrix
+
+![Correlation Matrix](images/crrelation_matrix.png)
+
+**Key Correlations**
+
+| Variables | Correlation |
+|------------|-------------|
+| Revenue vs Cost | 0.97 |
+| Revenue vs Profit | 0.83 |
+| Cost vs Profit | 0.69 |
+| Quantity vs Revenue | 0.60 |
+| Discount vs Profit | -0.24 |
+
+**Finding**
+
+Revenue and Cost have a very strong positive relationship. Discounts show a negative relationship with profit.
+
+---
+
+## Key Business Insights
+
+### Category Performance
 
 | Category | Revenue | Profit |
-|----------|----------|---------|
-| Fashion | 6.23M | 1.66M |
-| Electronics | 6.31M | 1.63M |
-| Groceries | 1.75M | 0.53M |
+|------------|------------|------------|
+| Fashion | 6,232,280 | 1,660,525 |
+| Electronics | 6,316,917 | 1,632,229 |
+| Groceries | 1,752,706 | 533,561 |
 
-**Finding:**
+**Insight**
 
-Fashion and Electronics are the primary profit drivers.
-
----
-
-### Discount Analysis
-
-Top discounted products include:
-
-- Difficult Vegetables
-- US Snacks
-- Him Smartphone
-- Audience Television
-
-**Finding:**
-
-Heavy discounts do not necessarily result in higher revenue.
+Fashion and Electronics are the primary revenue and profit contributors.
 
 ---
 
 ### Store Performance
 
-Top performing stores:
+Top Performing Stores:
 
-- MegaMart New Michele
-- MegaMart Johnmouth
-- MegaMart Diranahaven
-- MegaMart Jimenezborough
-- MegaMart Peckmouth
+1. MegaMart New Michele
+2. MegaMart Johnmouth
+3. MegaMart Diranahaven
+4. MegaMart Jimenezborough
+5. MegaMart Peckmouth
 
-**Finding:**
+**Insight**
 
-Store performance varies significantly, creating opportunities for operational optimization.
+Store performance varies considerably, indicating opportunities for operational improvements and benchmarking.
 
 ---
 
-## 💡 Recommendations
+### Discount Analysis
+
+Products with the highest average discounts include:
+
+- Difficult Vegetables
+- US Snacks
+- Him Smartphone
+- Audience Television
+- Four Accessories
+
+**Insight**
+
+Products receiving higher discounts do not consistently generate higher revenue.
+
+---
+
+## Business Recommendations
 
 ### Pricing Strategy
 
 - Reduce excessive discounting on high-margin products.
-- Apply targeted promotional campaigns.
+- Implement targeted promotional campaigns.
 
 ### Product Strategy
 
-- Focus inventory planning on Fashion and Electronics.
-- Improve Grocery category profitability.
+- Increase focus on Fashion and Electronics categories.
+- Improve pricing and sourcing strategy for Grocery products.
 
-### Store Optimization
+### Store Strategy
 
-- Analyze practices of top-performing stores.
-- Replicate successful strategies across lower-performing locations.
+- Benchmark high-performing stores.
+- Replicate successful practices across lower-performing locations.
 
-### Profit Improvement
+### Profit Optimization
 
 - Monitor discount effectiveness regularly.
-- Prioritize products with strong revenue-to-profit conversion.
+- Focus on products with strong profit margins.
 
 ---
 
-## 🚀 Project Workflow
+## Project Workflow
 
 ```text
 PostgreSQL Database
-        ↓
+        │
+        ▼
      SQL Queries
-        ↓
+        │
+        ▼
  Data Extraction
-        ↓
+        │
+        ▼
       Python
-        ↓
- Data Analysis
-        ↓
- Visualization
-        ↓
+        │
+        ▼
+ Exploratory Data Analysis
+        │
+        ▼
+ Data Visualization
+        │
+        ▼
  Business Insights
+        │
+        ▼
+ Recommendations
 ```
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```text
 retail_sales/
 │
-├── data/
-│   ├── customers.csv
-│   ├── products.csv
-│   ├── stores.csv
-│   └── transactions.csv
-│
 ├── images/
-│   ├── revenue_distribution.png
-│   ├── profit_distribution.png
+│   ├── revenue_distribustion.png
+│   ├── profit_distribustion.png
 │   ├── category_profit.png
 │   ├── discount_vs_profit.png
-│   └── correlation_matrix.png
+│   ├── crrelation_matrix.png
+│   ├── 10)Product_by_avg_discount_vs_revenue(1).png
+│   ├── 11)Category_by_revenue_vs_profit(1).png
+│   └── 13)Stores_by_revenue_vs_profit(2).png
 │
 ├── retail_sales.ipynb
 ├── retail_sales.sql
-├── requirements.txt
-└── README.md
+├── README.md
 ```
 
 ---
 
-## 📚 Skills Demonstrated
+## Skills Demonstrated
 
 ### SQL
 
@@ -319,35 +351,24 @@ retail_sales/
 
 - Pandas
 - Data Cleaning
-- Exploratory Data Analysis (EDA)
-- Visualization
+- Exploratory Data Analysis
+- Data Visualization
 
-### Analytics
+### Business Analytics
 
 - Revenue Analysis
 - Profit Analysis
 - Correlation Analysis
+- KPI Development
 - Business Recommendations
-- KPI Identification
 
 ---
 
-## 👨‍💻 Author
+## Author
 
-**James**
+James
 
-Aspiring Data Analyst skilled in:
+Data Analyst | SQL | Python | PostgreSQL | Power BI | Excel
 
-- SQL
-- Python
-- PostgreSQL
-- Power BI
-- Excel
-- Data Visualization
-- Business Analytics
-
-GitHub: https://github.com/Aloycious-James
-
----
-
-⭐ If you found this project useful, consider giving it a star.
+GitHub:
+https://github.com/Aloycious-James

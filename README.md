@@ -80,7 +80,7 @@ SQL was used to validate data, create business metrics, and answer key business 
 
 ### Store Revenue vs Profit Analysis
 
-![Store Revenue vs Profit](SQL_Scripts/SQL_Screen_Shots/13_Stores_by_revenue_vs_profit.png)
+![Store Revenue vs Profit](Images/13_Stores_by_revenue_vs_profit.png)
 
 #### Why this analysis?
 
@@ -100,7 +100,7 @@ Python was used to explore relationships between business metrics and identify h
 
 ### Correlation Analysis
 
-![Correlation Matrix](Python/images/correlation_matrix.png)
+![Correlation Matrix](Images/correlation_matrix.png)
 
 #### Why this analysis?
 

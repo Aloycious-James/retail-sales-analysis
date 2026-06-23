@@ -100,7 +100,7 @@ Python was used to explore relationships between business metrics and identify h
 
 ### Correlation Analysis
 
-![Correlation Matrix](Images/correlation_matrix.png)
+![Correlation Matrix](Python/images/correlation_matrix.png)
 
 #### Why this analysis?
 

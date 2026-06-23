@@ -1,216 +1,189 @@
-# Retail Sales Analysis Using SQL and Python
+# Retail Sales Analytics: End-to-End Data Analytics Project
 
 ## Project Overview
 
-This project analyzes retail sales transactions using PostgreSQL, SQL, and Python to identify revenue trends, profitability drivers, discount impact, category performance, and store-level performance.
+This project demonstrates an end-to-end Retail Sales Analytics workflow using PostgreSQL, Python, Excel, and Power BI. The goal was to transform raw transactional data into meaningful business insights that support revenue growth, profitability improvement, and strategic decision-making.
 
-The objective is to simulate a real-world retail analytics workflow by extracting data from a relational database, performing exploratory data analysis, generating visualizations, and delivering business recommendations.
+The project follows a complete analytics pipeline:
 
----
-
-## Project Preview
-
-### Category Revenue and Profit Analysis
-
-![Category Revenue vs Profit](images/11)Category_by_revenue_vs_profit.png)
-
-### Store Revenue and Profit Analysis
-
-![Store Revenue vs Profit](images/13)Stores_by_revenue_vs_profit.png)
-
-### Product Average Discount vs Revenue
-
-![Product Discount vs Revenue](images/10)Product_by_avg_discount_vs_revenue.png)
+Raw Data → SQL Database → Business Analysis → Python EDA → Excel Reporting → Power BI Dashboard
 
 ---
 
 ## Business Problem
 
-Retail companies need to answer several important business questions:
+Retail companies generate thousands of transactions every day. Without proper analysis, it becomes difficult to answer important business questions such as:
 
-- Which product categories generate the highest revenue and profit?
-- How do discounts affect profitability?
-- Which stores perform best?
-- What factors influence revenue and profit?
-- How can business performance be improved?
+* Which products generate the highest revenue?
+* Which categories contribute the most profit?
+* How do discounts impact profitability?
+* Which stores perform best?
+* Which regions require improvement?
+* What actions can increase overall business performance?
 
-This project provides data-driven answers to support pricing, inventory, and sales strategies.
-
----
-
-## Tools and Technologies
-
-| Technology | Purpose |
-|------------|----------|
-| PostgreSQL | Database Management |
-| SQL | Data Extraction and Analysis |
-| Python | Data Analysis |
-| Pandas | Data Manipulation |
-| Matplotlib | Visualization |
-| Seaborn | Statistical Analysis |
-| Jupyter Notebook | Development Environment |
-| GitHub | Version Control |
+This project answers these questions through structured data analysis and interactive reporting.
 
 ---
 
-## Dataset Description
-
-The project contains four related tables.
-
-### Customers
-
-Contains customer information.
-
-| Column |
-|----------|
-| CustomerID |
-| CustomerName |
-| Gender |
-| Age |
-
-### Products
-
-Contains product information.
-
-| Column |
-|----------|
-| ProductID |
-| ProductName |
-| Category |
-| UnitPrice |
-| CostPrice |
-
-### Stores
-
-Contains store information.
-
-| Column |
-|----------|
-| StoreID |
-| StoreName |
-| Region |
-
-### Transactions
-
-Contains sales transaction data.
-
-| Column |
-|----------|
-| TransactionID |
-| TransactionDate |
-| CustomerID |
-| ProductID |
-| StoreID |
-| Quantity |
-| Discount |
-
----
-
-## Database Schema
+## Project Architecture
 
 ```text
-Customers
-    │
-    ├── Transactions ─── Products
-    │
-    └── Stores
+Dataset Files
+     ↓
+PostgreSQL Database
+     ↓
+SQL Business Analysis
+     ↓
+Python Exploratory Data Analysis
+     ↓
+Excel Reporting
+     ↓
+Power BI Dashboard
 ```
 
 ---
 
-## Revenue and Profit Formula
+## Dataset Information
 
-### Revenue
+The project uses multiple datasets representing different business entities.
 
-```sql
-(UnitPrice * Quantity) * (1 - Discount)
-```
+### Tables
 
-### Profit
+| Table                 | Description                 |
+| --------------------- | --------------------------- |
+| Customers             | Customer information        |
+| Products              | Product details and pricing |
+| Stores                | Store information           |
+| Transactions          | Sales transactions          |
+| Retail Business Table | Combined business dataset   |
 
-```sql
-((UnitPrice * Quantity) * (1 - Discount))
--
-(CostPrice * Quantity)
-```
+### Dataset Size
 
----
-
-## SQL Analysis Performed
-
-The following business queries were developed using PostgreSQL:
-
-- Revenue by Product Category
-- Profit by Product Category
-- Revenue by Store
-- Profit by Store
-- Revenue by Region
-- Top Discounted Products
-- Revenue Distribution Analysis
-- Profit Distribution Analysis
-- Correlation Analysis
+* Customers: 200
+* Products: 50
+* Stores: 5
+* Transactions: 5000+
 
 ---
 
-## Exploratory Data Analysis
+## SQL Business Analysis
 
-### Revenue Distribution
+SQL was used to validate data, create business metrics, and answer key business questions.
 
-![Revenue Distribution](images/revenue_distribustion.png)
+### Business Questions Solved
 
-**Finding**
+* Which stores generate the highest revenue?
+* Which products generate the highest profit?
+* Which categories perform best?
+* Which regions contribute most revenue?
+* How do discounts affect profitability?
 
-Revenue distribution is positively skewed. Most transactions generate low to medium revenue while a smaller number contribute significantly higher revenue.
+### Store Revenue vs Profit Analysis
+
+![Store Revenue vs Profit](SQL%20Scripts/SQL%20Screen%20Shots/13)Stores_by_revenue_vs_profit.png)
+
+#### Why this analysis?
+
+Store-level performance is one of the most important metrics for retail management. Comparing revenue and profit helps identify high-performing and underperforming stores.
+
+#### Key Findings
+
+* MegaMart Vince Michele generated the highest profit.
+* Store performance varies despite similar revenue levels.
+* Profitability depends not only on sales volume but also on pricing and discount strategies.
 
 ---
 
-### Profit Distribution
+## Python Exploratory Data Analysis
 
-![Profit Distribution](images/profit_distribustion.png)
+Python was used to explore relationships between business metrics and identify hidden patterns in the data.
 
-**Finding**
+### Correlation Analysis
 
-Profit distribution is positively skewed. A limited number of transactions contribute a large portion of overall profit.
+![Correlation Matrix](Python/images/correlation_matrix.png)
+
+#### Why this analysis?
+
+Correlation analysis helps understand how business variables influence each other.
+
+#### Key Findings
+
+* Revenue and Profit show a strong positive correlation.
+* Quantity sold strongly impacts revenue generation.
+* Discounts show a negative relationship with profitability.
+* Higher discounts do not necessarily lead to higher profits.
 
 ---
 
 ### Category Profit Analysis
 
-![Category Profit](images/category_profit.png)
+![Category Profit](Python/images/category_profit.png)
 
-**Finding**
+#### Why this analysis?
 
-Fashion and Electronics generate the highest profit, while Groceries contribute significantly less profit.
+Category-level analysis identifies which product groups drive business performance.
 
----
+#### Key Findings
 
-### Discount vs Profit Analysis
-
-![Discount vs Profit](images/discount_vs_profit.png)
-
-**Finding**
-
-Higher discounts generally reduce profitability and create larger profit fluctuations.
+* Fashion generated the highest overall profit.
+* Electronics delivered comparable profitability.
+* Groceries contributed significantly less profit than other categories.
 
 ---
 
-### Correlation Matrix
+## Power BI Dashboard
 
-![Correlation Matrix](images/crrelation_matrix.png)
+Power BI was used to create an interactive dashboard for business stakeholders.
 
-**Key Correlations**
+### Executive Summary Dashboard
 
-| Variables | Correlation |
-|------------|-------------|
-| Revenue vs Cost | 0.97 |
-| Revenue vs Profit | 0.83 |
-| Cost vs Profit | 0.69 |
-| Quantity vs Revenue | 0.60 |
-| Discount vs Profit | -0.24 |
+![Executive Summary](Images/executive_summary.png)
 
-**Finding**
+#### Purpose
 
-Revenue and Cost have a very strong positive relationship. Discounts show a negative relationship with profit.
+Provides leadership teams with a quick overview of:
+
+* Total Revenue
+* Total Profit
+* Customer Metrics
+* Product Performance
+* Sales Trends
+
+#### Business Value
+
+Allows decision-makers to monitor company performance without running manual reports.
+
+---
+
+### Regional Performance Dashboard
+
+![Regional Performance](Images/regional_performance.png)
+
+#### Purpose
+
+Analyzes revenue and profit performance across different regions.
+
+#### Key Findings
+
+* Revenue contribution varies significantly across regions.
+* High-performing regions can be used as benchmarks.
+* Underperforming regions require targeted improvement strategies.
+
+---
+
+### Product Category Dashboard
+
+![Product Category Analysis](Images/product_category_analysis.png)
+
+#### Purpose
+
+Evaluates category-level performance and identifies growth opportunities.
+
+#### Key Findings
+
+* Fashion and Electronics are primary revenue drivers.
+* Product mix optimization can improve profitability.
+* Low-performing categories require strategic review.
 
 ---
 
@@ -218,47 +191,20 @@ Revenue and Cost have a very strong positive relationship. Discounts show a nega
 
 ### Category Performance
 
-| Category | Revenue | Profit |
-|------------|------------|------------|
-| Fashion | 6,232,280 | 1,660,525 |
-| Electronics | 6,316,917 | 1,632,229 |
-| Groceries | 1,752,706 | 533,561 |
+| Category    | Revenue | Profit |
+| ----------- | ------- | ------ |
+| Fashion     | 6.23M   | 1.66M  |
+| Electronics | 6.31M   | 1.63M  |
+| Groceries   | 1.75M   | 0.53M  |
 
-**Insight**
+### Major Findings
 
-Fashion and Electronics are the primary revenue and profit contributors.
-
----
-
-### Store Performance
-
-Top Performing Stores:
-
-1. MegaMart New Michele
-2. MegaMart Johnmouth
-3. MegaMart Diranahaven
-4. MegaMart Jimenezborough
-5. MegaMart Peckmouth
-
-**Insight**
-
-Store performance varies considerably, indicating opportunities for operational improvements and benchmarking.
-
----
-
-### Discount Analysis
-
-Products with the highest average discounts include:
-
-- Difficult Vegetables
-- US Snacks
-- Him Smartphone
-- Audience Television
-- Four Accessories
-
-**Insight**
-
-Products receiving higher discounts do not consistently generate higher revenue.
+1. Fashion generated the highest profit.
+2. Electronics contributed significantly to total revenue.
+3. Discounts negatively impact profitability.
+4. Revenue and profit are strongly correlated.
+5. Store performance varies considerably.
+6. Regional opportunities exist for business expansion.
 
 ---
 
@@ -266,109 +212,59 @@ Products receiving higher discounts do not consistently generate higher revenue.
 
 ### Pricing Strategy
 
-- Reduce excessive discounting on high-margin products.
-- Implement targeted promotional campaigns.
+* Reduce excessive discounting.
+* Focus on value-based promotions.
 
 ### Product Strategy
 
-- Increase focus on Fashion and Electronics categories.
-- Improve pricing and sourcing strategy for Grocery products.
+* Increase investment in high-performing categories.
+* Optimize inventory allocation based on demand.
 
 ### Store Strategy
 
-- Benchmark high-performing stores.
-- Replicate successful practices across lower-performing locations.
+* Replicate best practices from top-performing stores.
+* Monitor underperforming locations closely.
 
-### Profit Optimization
+### Regional Growth Strategy
 
-- Monitor discount effectiveness regularly.
-- Focus on products with strong profit margins.
-
----
-
-## Project Workflow
-
-```text
-PostgreSQL Database
-        │
-        ▼
-     SQL Queries
-        │
-        ▼
- Data Extraction
-        │
-        ▼
-      Python
-        │
-        ▼
- Exploratory Data Analysis
-        │
-        ▼
- Data Visualization
-        │
-        ▼
- Business Insights
-        │
-        ▼
- Recommendations
-```
+* Expand operations in high-performing regions.
+* Investigate reasons for lower regional performance.
 
 ---
 
-## Project Structure
+## Tools Used
+
+* PostgreSQL
+* Python
+* Pandas
+* Matplotlib
+* Seaborn
+* Excel
+* Power BI
+* GitHub
+
+---
+
+## Repository Structure
 
 ```text
 retail_sales/
 │
-├── images/
-│   ├── revenue_distribustion.png
-│   ├── profit_distribustion.png
-│   ├── category_profit.png
-│   ├── discount_vs_profit.png
-│   ├── crrelation_matrix.png
-│   ├── 10)Product_by_avg_discount_vs_revenue(1).png
-│   ├── 11)Category_by_revenue_vs_profit(1).png
-│   └── 13)Stores_by_revenue_vs_profit(2).png
-│
-├── retail_sales.ipynb
-├── retail_sales.sql
-├── README.md
+├── Dataset/
+├── Excel/
+├── PowerBI/
+├── Python/
+├── SQL Scripts/
+└── README.md
 ```
-
----
-
-## Skills Demonstrated
-
-### SQL
-
-- Joins
-- Aggregations
-- Group By
-- Sorting
-- Business Metrics Calculation
-
-### Python
-
-- Pandas
-- Data Cleaning
-- Exploratory Data Analysis
-- Data Visualization
-
-### Business Analytics
-
-- Revenue Analysis
-- Profit Analysis
-- Correlation Analysis
-- KPI Development
-- Business Recommendations
 
 ---
 
 ## Author
 
-James
+James A
 
-Data Analyst | SQL | Python | PostgreSQL | Power BI | Excel
+Data Analyst
 
-GitHub:
-https://github.com/Aloycious-James
+Skills:
+SQL | Python | Excel | Power BI | Data Visualization | Business Analysis

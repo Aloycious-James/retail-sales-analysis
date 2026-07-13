@@ -43,36 +43,6 @@ The dataset consists of multiple business entities:
 
 ---
 
-# Predictive Analytics
-
-## Revenue Prediction Model
-
-Developed a Linear Regression model to identify key drivers of revenue and evaluate the impact of business variables.
-
-### Features Used
-- Cost
-- Quantity
-- Discount
-- Product Category
-- Region
-
-### Model Performance
-- R² Score: 0.956
-- MAE: 331
-- RMSE: 478
-
-### Key Findings
-- Cost and quantity positively impact revenue.
-- Higher discounts negatively impact revenue.
-- Electronics outperformed other product categories.
-- Regional factors had lower predictive power compared to operational metrics.
-
-### Statistical Validation
-- Performed OLS Regression using Statsmodels.
-- All major predictors achieved **P-value < 0.05**, indicating statistically significant relationships with revenue.
-
----
-
 ## Data Model
 
 The data was structured into a relational model to enable accurate reporting and analysis across customers, products, stores, and transactions.
@@ -148,6 +118,35 @@ Certain product categories contribute disproportionately to overall profitabilit
 * Inventory expansion
 * Marketing investment
 * Strategic promotions
+
+
+# Predictive Analytics
+
+## Revenue Prediction Model
+
+Developed a Linear Regression model to identify key drivers of revenue and evaluate the impact of business variables.
+
+### Features Used
+- Cost
+- Quantity
+- Discount
+- Product Category
+- Region
+
+### Model Performance
+- R² Score: 0.956
+- MAE: 331
+- RMSE: 478
+
+### Key Findings
+- Cost and quantity positively impact revenue.
+- Higher discounts negatively impact revenue.
+- Electronics outperformed other product categories.
+- Regional factors had lower predictive power compared to operational metrics.
+
+### Statistical Validation
+- Performed OLS Regression using Statsmodels.
+- All major predictors achieved **P-value < 0.05**, indicating statistically significant relationships with revenue.
 
 ---
 

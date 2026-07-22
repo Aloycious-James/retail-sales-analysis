@@ -1,272 +1,134 @@
-# Retail Sales Performance Analysis
+# Retail Performance & Profitability Analytics
 
-## Project Overview
+A full-stack analytics project built on a simulated retail dataset — SQL for data modeling and extraction, Python for statistical analysis and forecasting, and Excel/Power BI for the reporting layer. The goal was to treat this like a real stakeholder request, not just an EDA notebook: define the business problem first, then build backward from it.
 
-This project analyzes retail sales performance across products, stores, customers, and regions to identify revenue drivers, profitability trends, and business growth opportunities.
-
-The analysis combines SQL, Python, Excel, and Power BI to transform raw transactional data into actionable business insights and executive-level dashboards.
+**Tools:** PostgreSQL · Python (Pandas, Scikit-learn, Statsmodels) · Excel · Power BI
 
 ---
 
-## Business Objective
+## The Business Problem
 
-Retail businesses generate large volumes of transaction data every day, but raw data alone does not explain:
+MegaMart is a 5-store retail chain selling across three categories — Electronics, Fashion, and Groceries — through four regions. Leadership had transaction-level data sitting in a database but no consolidated view of where revenue and profit actually came from, whether their discounting was working, or which regions and stores needed attention.
 
-* Which regions drive the highest revenue?
-* Which product categories generate the most profit?
-* How discounts impact profitability?
-* Which stores underperform despite strong sales?
-* Where management should focus future growth efforts?
+Three questions drove the project:
 
-This project answers those business questions through an end-to-end analytics workflow.
+1. Which categories and products are genuinely profitable, not just high-revenue?
+2. Is the current discount strategy helping margin or quietly eating into it?
+3. Where is performance uneven across regions and stores, and why?
+
+## Who Would Use This
+
+| Team | What they'd pull from it |
+|---|---|
+| Category / Merchandising | Which categories and SKUs to prioritize for inventory and shelf space |
+| Pricing & Promotions | Whether discounts are actually converting into revenue, by category |
+| Regional / Store Operations | Which regions and stores are underperforming and by how much |
+| Finance / Leadership | Revenue, profit, and margin at a glance, filterable by year |
+| Marketing / CRM | Which customer age segments are most valuable, for targeting |
 
 ---
 
-## Dataset Overview
+## About the Dataset
 
-The dataset consists of multiple business entities:
+Source: [Retail Sales Dataset on Kaggle](https://www.kaggle.com/datasets/buharishehu/retail-sales-dataset) — a simulated retail environment built around four related tables (customers, products, stores, transactions), intended for practicing data modeling and dashboarding rather than analyzing real sales history.
 
-| Table                 | Description                      |
-| --------------------- | -------------------------------- |
-| Customers             | Customer demographic information |
-| Products              | Product details and categories   |
-| Stores                | Store location information       |
-| Transactions          | Sales transactions               |
-| Retail Business Table | Consolidated business dataset    |
+- **5,000 transactions**, 2023–2025
+- **200 customers**, 50 products across 3 categories / 14 subcategories, 5 stores across 4 regions
+- Revenue, cost, and profit aren't in the raw data — they're calculated fields I built from unit price, cost price, quantity, and discount
 
-### Data Volume
-
-* 200 Customers
-* 50 Products
-* 5 Stores
-* 5,000 Transactions
+**What I'd flag before treating this as production-quality data:** product names and customer city names are auto-generated (e.g. "And Footwear," "Chair Laptop," "Port Jacob"), so they read as nonsense out of context — I kept them as-is rather than relabeling, since that would misrepresent the data. Discounts are capped at a narrow 0–15% band, there's no returns/refunds field, and there's no marketing spend or campaign field to tie promotions to outcomes. If I were scoping this as a real business dataset, I'd want realistic product naming, a wider discount range, and a promotions table to actually test what's driving the discount-revenue relationship rather than inferring it indirectly.
 
 ---
 
 ## Data Model
 
-The data was structured into a relational model to enable accurate reporting and analysis across customers, products, stores, and transactions.
+Star schema built in Power BI: the transaction fact table joined to a date dimension table (for year/month/quarter filtering) and a separate measures table holding the DAX calculations (Total Profit, Profit Margin %, Average Order Value, Customer count).
 
-![Data Model](Images/data_model.png)
-
-### Purpose
-
-A proper data model improves:
-
-* Query performance
-* Relationship management
-* Reporting accuracy
-* Scalability for dashboard development
+The SQL layer (`/SQL_Scripts`) mirrors this: `table_creation.sql` builds the four normalized tables, `table_retrive.sql` joins them into the flat table Python and Power BI both consume, and `business_queries.sql` / `data_analysis.sql` hold the aggregation queries used to sanity-check the Python and dashboard numbers against each other.
 
 ---
 
-# Analytical Workflow
+## Method
 
-## 1. SQL Business Analysis
+**SQL** — normalized schema, join logic, and the initial business queries (revenue/profit by category, region, store, product, and discount tier). This is the "what happened" layer.
 
-SQL was used to extract business-critical KPIs and answer key management questions.
+**Python** (`retail_sales.ipynb`) — the "why" layer:
+- Data quality checks (nulls, duplicates — none found on 5,000 rows)
+- Distribution and correlation analysis across revenue, cost, profit, quantity, and discount
+- A linear regression model predicting revenue from cost, quantity, and discount, validated with an OLS regression and a VIF check for multicollinearity
 
-### Key Business Questions
+| Model | R² | RMSE | MAE |
+|---|---|---|---|
+| Linear Regression | 0.957 | 478.5 | 331.3 |
+| OLS (statsmodels) | 0.956 | — | — |
 
-* Total Revenue Generated
-* Total Profit Earned
-* Top Revenue Generating Products
-* Best Performing Regions
-* Most Profitable Categories
-* Revenue vs Profit by Store
-* Impact of Discounts on Profitability
+VIF scores for all three features came in between 2.1 and 4.8 — well under the threshold where multicollinearity would be a concern, so the coefficients are trustworthy on their own.
 
-### Sample Business Analysis
-
-![Store Revenue vs Profit](SQL_Scripts/SQL_Screen_Shots/13_stores_by_revenue_vs_profit.png)
-
-### Business Insight
-
-Store performance varies significantly when comparing revenue and profit.
-
-High revenue does not always translate into high profitability, highlighting opportunities to optimize pricing strategies, product mix, and discount policies.
+**Excel & Power BI** — two dashboards (Sales Performance, Customer Analysis) built off the same underlying table, cross-checked against the SQL aggregates so the numbers agree everywhere.
 
 ---
 
-## 2. Python Exploratory Data Analysis
+## What the Data Shows
 
-Python was used for statistical exploration and pattern discovery.
+**Category profit doesn't track category revenue.** Electronics generates the most revenue (₹6.32M) but Fashion generates more profit (₹1.66M vs ₹1.63M) on less revenue, because it carries a better margin. Groceries brings in the least revenue by far but has the *highest* margin of the three (29.3% vs 26.7% for Electronics) — it's a small category punching above its weight, and a case for testing volume growth there rather than writing it off.
 
-### Correlation Analysis
+<img src="Images/insight_category_margin.png" width="320">
 
-![Correlation Matrix](Python/images/correlation_matrix.png)
+**East is carrying the business.** East generates roughly 39% of total revenue — nearly double any other single region — while West, North, and South are all within a tight band of each other. That's either a genuine regional strength worth studying and replicating, or a concentration risk if East softens.
 
-### Why This Analysis?
+<img src="Images/insight_regional_performance.png" width="320">
 
-The correlation matrix identifies relationships between key business variables such as:
+**Discounting works in Electronics and doesn't in Groceries.** Electronics products hold revenue steady even at meaningful discount levels. Vegetables and packaged snacks, by contrast, get discounted at similar rates but don't convert that into revenue — the SQL discount-tier query and the Python correlation (discount vs. profit, r = -0.24) both point the same direction: discounting on low-consideration grocery items is currently a margin cost without a clear payoff.
 
-* Revenue
-* Profit
-* Discounts
-* Product metrics
+**The 55+ segment is both the largest and the most valuable customer group** — 64 customers (the biggest age bracket) generating ₹1.72M, well ahead of every other segment. The 18–25 segment is the smallest and lowest-revenue. That's useful for deciding where a loyalty program pays off versus where the priority is acquisition.
 
-Understanding these relationships helps management identify factors influencing business performance.
-
-### Category Profit Analysis
-
-![Category Profit](Python/images/category_profit.png)
-
-### Business Insight
-
-Certain product categories contribute disproportionately to overall profitability, making them strong candidates for:
-
-* Inventory expansion
-* Marketing investment
-* Strategic promotions
-
-
-# Predictive Analytics
-
-## Revenue Prediction Model
-
-Developed a Linear Regression model to identify key drivers of revenue and evaluate the impact of business variables.
-
-### Features Used
-- Cost
-- Quantity
-- Discount
-- Product Category
-- Region
-
-### Model Performance
-- R² Score: 0.956
-- MAE: 331
-- RMSE: 478
-
-### Key Findings
-- Cost and quantity positively impact revenue.
-- Higher discounts negatively impact revenue.
-- Electronics outperformed other product categories.
-- Regional factors had lower predictive power compared to operational metrics.
-
-### Statistical Validation
-- Performed OLS Regression using Statsmodels.
-- All major predictors achieved **P-value < 0.05**, indicating statistically significant relationships with revenue.
+<img src="Images/insight_customer_age_value.png" width="320">
 
 ---
 
-## 3. Executive Dashboard Development
+## Recommendations
 
-Power BI dashboards were created to support decision-making at different organizational levels.
-
----
-
-## Executive Summary Dashboard
-
-![Executive Dashboard](Images/executive_summary.png)
-
-### Purpose
-
-Provides leadership with a high-level view of:
-
-* Revenue
-* Profit
-* Customer activity
-* Sales performance
-
-### Business Value
-
-Allows executives to quickly assess overall business health and monitor KPI performance.
+- **Pull back on Vegetables/Snacks discounting** — the data doesn't show it earning its cost. Redirect that promotional budget toward Electronics, where discounting demonstrably moves revenue.
+- **Treat Groceries as a margin play, not a volume afterthought** — its 29.3% margin is the best of the three categories; worth testing whether modest inventory expansion pays off given how profitable each unit already is.
+- **Investigate what East is doing differently** before assuming it's just a bigger market — if it's operational (staffing, store layout, local demand), it may be replicable in the other three regions.
+- **Build retention efforts around the 55+ segment** and separately, a lighter-weight acquisition push for 18–25 — they're different problems and probably need different tactics.
 
 ---
 
-## Regional Performance Dashboard
+## Dashboards
 
-![Regional Performance](Images/regional_performance.png)
+**Sales Performance** — category revenue/profit/margin, monthly trend, regional and store-level discount and profit breakdowns.
 
-### Purpose
+<img src="Images/dashboard_sales_performance.png" width="700">
 
-Evaluates performance across geographic regions.
+**Customer Analysis** — revenue and profit by age group, customer join trend by year, tenure and discount patterns by segment.
 
-### Key Insight
+<img src="Images/dashboard_customer_analysis.png" width="700">
 
-Regional analysis reveals sales concentration and identifies underperforming markets requiring strategic attention.
+**Excel version** — the same KPIs rebuilt independently in Excel as a cross-check against the Power BI numbers, rather than just exporting one tool's output twice.
 
----
-
-## Product Category Dashboard
-
-![Category Dashboard](Images/product_category_analysis.png)
-
-### Purpose
-
-Analyzes product category contribution to revenue and profit.
-
-### Business Value
-
-Supports:
-
-* Product portfolio optimization
-* Category investment decisions
-* Inventory planning
+<img src="Images/excel_dashboard.png" width="700">
 
 ---
 
-# Key Findings
+## Repository Structure
 
-### Revenue Drivers
-
-* A small group of products contributes a significant share of total revenue.
-* Product mix plays a major role in overall business performance.
-
-### Profitability Trends
-
-* High sales volume does not always lead to high profit.
-* Discount strategies require optimization to protect margins.
-
-### Regional Opportunities
-
-* Certain regions outperform others in both revenue and profitability.
-* Underperforming regions represent growth opportunities.
-
-### Category Performance
-
-* Specific categories consistently generate stronger profit margins.
-* Strategic focus on these categories can improve overall profitability.
+```
+retail-sales-analysis/
+├── Dataset/            raw CSVs (customers, products, stores, transactions) + combined table
+├── SQL_Scripts/        table creation, data validation, and business query scripts
+├── Python/             retail_sales.ipynb — EDA, correlation analysis, regression model
+├── Excel Report/        Excel dashboard workbook
+├── PowerBI/             Power BI dashboard file (.pbix)
+├── Images/              dashboard exports and diagrams used in this README
+└── README.md
+```
 
 ---
 
-# Business Recommendations
+## Author
 
-### Pricing Strategy
+**James**
+SQL · Python · PostgreSQL · Power BI · Excel
 
-Review high-discount transactions and implement margin-protection policies.
-
-### Product Optimization
-
-Increase investment in high-margin product categories.
-
-### Regional Expansion
-
-Replicate successful regional strategies in lower-performing markets.
-
-### Performance Monitoring
-
-Track revenue and profit together rather than relying solely on sales volume.
-
----
-
-# Tools Used
-
-| Tool     | Purpose                                  |
-| -------- | ---------------------------------------- |
-| SQL      | Business Analysis                        |
-| Python   | Exploratory Data Analysis                |
-| Excel    | Data Preparation                         |
-| Power BI | Dashboard Development                    |
-| GitHub   | Version Control & Portfolio Presentation |
-
----
-
-# Project Outcome
-
-This project demonstrates the complete analytics lifecycle:
-
-**Data Collection → Data Modeling → SQL Analysis → Python Exploration → Dashboard Development → Business Recommendations**
-
-The final solution provides management with actionable insights for improving revenue growth, profitability, and operational performance.
+GitHub: [Aloycious-James](https://github.com/Aloycious-James)

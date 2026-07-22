@@ -99,7 +99,7 @@ VIF scores for all three features came in between 2.1 and 4.8 — well under the
 
 **Sales Performance** — category revenue/profit/margin, monthly trend, regional and store-level discount and profit breakdowns.
 
-<img src="Images/dashboard_sales_performance.png" width="700">
+<img src="Images/dashboard_sales_performanc.png" width="700">
 
 **Customer Analysis** — revenue and profit by age group, customer join trend by year, tenure and discount patterns by segment.
 
